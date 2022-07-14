@@ -5,7 +5,6 @@ PyCubed Mini mainboard-v02 for Pocketqube Mission
 """
 from pycubed import pocketqube as cubesat
 from pycubed import _BOOTCNT, _FLAG, _RSTERRS, _DWNLINK, _DCOUNT
-from os import statvfs
 
 
 def status():
@@ -50,26 +49,3 @@ def status():
     })
 
     return cubesat._stat
-
-
-def storage_stats():
-    """
-    return the storage statistics about the SD card and
-    mainboard file system
-    """
-    sd = 0
-    if cubesat.hardware['SDcard']:
-        # statvfs returns info about SD card (mounted file system)
-        sd = statvfs('/sd/')
-        sd_storage_used = sd[3]
-        sd_storage_total = sd[2]
-        sd = int(100 * sd_storage_used / sd_storage_total)
-
-    # returns information about the overall file system
-    fs = statvfs('/')
-    fs_storage_used = fs[3]
-    fs_storage_total = fs[2]
-    fs = int(100 * fs_storage_used / fs_storage_total)
-
-    # return both sets of information
-    return (fs, sd)
